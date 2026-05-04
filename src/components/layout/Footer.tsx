@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { MapPin, Phone, Mail, Clock, Instagram, Facebook } from "lucide-react";

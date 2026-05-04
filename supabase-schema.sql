@@ -184,3 +184,34 @@ VALUES (
   TRUE,
   4
 );
+
+
+-- ── STORAGE BUCKET FOR PRODUCT & BLOG IMAGES ─────────
+-- Run this AFTER creating your schema to set up image uploads.
+-- In Supabase dashboard: Storage → New bucket → name it "products" → make it PUBLIC
+-- Then run this to set the upload policy:
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('products', 'products', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Allow anyone to read images (they're public product photos)
+CREATE POLICY "Public read access for product images"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'products');
+
+-- Allow authenticated users (admins) to upload images
+CREATE POLICY "Admins can upload product images"
+ON storage.objects FOR INSERT
+WITH CHECK (
+  bucket_id = 'products'
+  AND auth.role() = 'authenticated'
+);
+
+-- Allow authenticated users to delete their uploads
+CREATE POLICY "Admins can delete product images"
+ON storage.objects FOR DELETE
+USING (
+  bucket_id = 'products'
+  AND auth.role() = 'authenticated'
+);

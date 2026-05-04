@@ -1,19 +1,28 @@
-// app/blog/page.tsx
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Calendar } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { BlogPost } from "@/types";
 
-export const revalidate = 3600;
+export default function BlogPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
-async function getPosts(): Promise<BlogPost[]> {
-  const { data } = await supabase.from("blog_posts").select("*").eq("published", true).order("created_at", { ascending: false });
-  return data ?? [];
-}
+  useEffect(() => {
+    supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("published", true)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        setPosts(data ?? []);
+        setLoading(false);
+      });
+  }, []);
 
-export default async function BlogPage() {
-  const posts = await getPosts();
   const featured = posts[0];
   const rest = posts.slice(1);
 
@@ -23,13 +32,37 @@ export default async function BlogPage() {
         <div className="container-site">
           <p className="section-tag">Men&apos;s Style</p>
           <h1 className="font-display text-4xl font-bold text-brand-white">The Blog</h1>
-          <p className="text-brand-muted mt-2">Style tips, fashion news & grooming advice</p>
+          <p className="text-brand-muted mt-2">Style tips, fashion news &amp; grooming advice</p>
         </div>
       </div>
 
       <div className="container-site py-12 space-y-12">
-        {/* Featured post */}
-        {featured && (
+
+        {loading && (
+          <div className="space-y-6 animate-pulse">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 card overflow-hidden">
+              <div className="aspect-video bg-brand-dark2" />
+              <div className="p-8 space-y-3">
+                <div className="h-4 bg-brand-dark2 rounded w-1/4" />
+                <div className="h-8 bg-brand-dark2 rounded w-3/4" />
+                <div className="h-4 bg-brand-dark2 rounded" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="card overflow-hidden">
+                  <div className="aspect-video bg-brand-dark2" />
+                  <div className="p-5 space-y-2">
+                    <div className="h-4 bg-brand-dark2 rounded w-3/4" />
+                    <div className="h-3 bg-brand-dark2 rounded" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!loading && featured && (
           <Link href={`/blog/${featured.slug}`} className="group grid grid-cols-1 lg:grid-cols-2 gap-8 card card-hover overflow-hidden">
             <div className="relative aspect-video lg:aspect-auto lg:min-h-[320px] bg-brand-dark2">
               <Image src={featured.cover_image || "https://placehold.co/800x450/252525/C9A84C?text=Featured+Post"} alt={featured.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -46,8 +79,7 @@ export default async function BlogPage() {
           </Link>
         )}
 
-        {/* Post grid */}
-        {rest.length > 0 && (
+        {!loading && rest.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {rest.map((post) => (
               <Link key={post.id} href={`/blog/${post.slug}`} className="group card card-hover overflow-hidden">
@@ -68,7 +100,7 @@ export default async function BlogPage() {
           </div>
         )}
 
-        {posts.length === 0 && (
+        {!loading && posts.length === 0 && (
           <div className="text-center py-24">
             <p className="font-display text-2xl text-brand-light mb-2">No posts yet</p>
             <p className="text-brand-muted text-sm">Check back soon for style tips and news.</p>

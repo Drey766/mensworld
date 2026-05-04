@@ -1,17 +1,15 @@
+"use client";
+
 // =====================================================
 // HOME PAGE — app/page.tsx
 // =====================================================
-// This is a SERVER COMPONENT (no "use client" at the top).
-// Server Components run on the server and fetch data BEFORE
-// sending HTML to the browser. This means:
-//   • Faster initial page load (data is already in the HTML)
-//   • Better SEO (search engines see the content)
-//   • No loading spinners for the initial content
-//
-// The child components that need interactivity (like the marquee
-// animation or cart buttons) are Client Components.
+// Converted to a Client Component to avoid server-side
+// fetch failures when environment variables aren't
+// available during SSR (common in local development).
+// Data is fetched in the browser using the same Supabase
+// client that works everywhere else in the app.
 
-import type { Metadata } from "next";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import HeroSection from "@/components/home/HeroSection";
 import {
@@ -24,47 +22,29 @@ import {
 } from "@/components/home/HomeSections";
 import { Product } from "@/types";
 
-// Page-specific metadata (overrides the default in layout.tsx)
-export const metadata: Metadata = {
-  title: "Men's World Kenya | Premium Menswear in Nairobi",
-  description:
-    "Shop premium Turkish suits, shirts, shoes & more. Yala Towers, Nairobi CBD. Nationwide delivery across all 47 counties.",
-};
+export default function HomePage() {
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
 
-// `revalidate` tells Next.js how often to re-fetch this page's data.
-// 3600 seconds = 1 hour. After 1 hour, the next visitor triggers a re-build.
-// This is called ISR (Incremental Static Regeneration) — the page is
-// fast like a static site but still gets fresh data periodically.
-export const revalidate = 3600;
-
-// FETCH FEATURED PRODUCTS
-// This runs on the server before the page renders.
-async function getFeaturedProducts(): Promise<Product[]> {
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("is_featured", true)
-    .eq("in_stock", true)
-    .order("created_at", { ascending: false })
-    .limit(8);
-
-  if (error) {
-    console.error("Error fetching featured products:", error.message);
-    return [];
-  }
-
-  return data ?? [];
-}
-
-// THE PAGE COMPONENT
-// `async` allows us to use `await` to fetch data before rendering.
-export default async function HomePage() {
-  // Fetch data on the server — no loading state needed!
-  const featuredProducts = await getFeaturedProducts();
+  useEffect(() => {
+    // Fetch featured products client-side — same as admin/shop pages do
+    supabase
+      .from("products")
+      .select("*")
+      .eq("is_featured", true)
+      .eq("in_stock", true)
+      .order("created_at", { ascending: false })
+      .limit(8)
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("Error fetching featured products:", error.message);
+          return;
+        }
+        setFeaturedProducts(data ?? []);
+      });
+  }, []);
 
   return (
     <>
-      {/* Each section is its own component for maintainability */}
       <HeroSection />
       <MarqueeBar />
       <CategoryGrid />

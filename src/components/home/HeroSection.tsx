@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Truck, Shield, Star } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import img1 from '@/../public/images/pexels-el-gringo-photo-116752370-9936373.jpg'
 
 // Small trust badge shown in the hero
 const TrustBadge = ({ icon: Icon, text }: { icon: React.ElementType; text: string }) => (
@@ -100,7 +101,7 @@ export default function HeroSection() {
             {/* Main product image */}
             <div className="relative w-full max-w-sm lg:max-w-md aspect-[3/4] rounded-sm overflow-hidden">
               <Image
-                src="https://placehold.co/480x640/252525/C9A84C?text=Hero+Product"
+                src={img1}
                 alt="Premium menswear from Men's World Kenya"
                 fill
                 className="object-cover"
