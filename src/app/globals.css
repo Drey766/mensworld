@@ -1,0 +1,188 @@
+/*
+ * GLOBAL STYLES
+ * =============
+ * These three @tailwind directives inject Tailwind's styles into your CSS.
+ *
+ * @tailwind base      → Resets browser defaults (like removing default margins)
+ * @tailwind components → Any custom component classes you add with @layer
+ * @tailwind utilities  → All the utility classes (bg-*, text-*, p-*, etc.)
+ *
+ * Tailwind scans your files and only includes CSS for classes you actually USE.
+ * So the final production bundle is tiny — usually under 10kb.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * @layer base — overrides applied to raw HTML elements globally.
+ * This runs before Tailwind's utilities so utilities can still override it.
+ */
+@layer base {
+  /* Set the default font and background for the whole site */
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-brand-black text-brand-light font-body;
+    /* ^ @apply lets you use Tailwind classes inside CSS rules.
+         bg-brand-black = background: #0E0E0E (from our tailwind.config.ts)
+         text-brand-light = color: #E8E2D9
+         font-body = font-family: DM Sans  */
+  }
+
+  /* Headings use our display font (Playfair Display) */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+
+  /* Make all images responsive by default */
+  img {
+    @apply max-w-full;
+  }
+
+  /* Custom scrollbar styling for a polished look */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-brand-dark;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-gold rounded-full;
+  }
+
+  /* Focus ring — accessibility: shows outline when using keyboard navigation */
+  *:focus-visible {
+    @apply outline-2 outline-brand-gold outline-offset-2;
+  }
+}
+
+/*
+ * @layer components — reusable component classes you can use in JSX.
+ * These work like regular CSS classes but are optimised by Tailwind.
+ * Usage: <button className="btn-primary">Click me</button>
+ */
+@layer components {
+  /* ── BUTTONS ── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-brand-gold text-brand-black
+           px-6 py-3 rounded-sm
+           text-sm font-medium tracking-widest uppercase
+           transition-all duration-200
+           hover:bg-brand-gold-light hover:-translate-y-0.5
+           active:translate-y-0 active:bg-brand-gold-dark
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2
+           border border-brand-gold text-brand-gold
+           bg-transparent
+           px-6 py-3 rounded-sm
+           text-sm font-medium tracking-widest uppercase
+           transition-all duration-200
+           hover:bg-brand-gold hover:text-brand-black hover:-translate-y-0.5
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2
+           text-brand-muted bg-transparent border-0
+           px-4 py-2 rounded-sm text-sm
+           transition-colors duration-200
+           hover:text-brand-light hover:bg-brand-dark2;
+  }
+
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2
+           bg-brand-dark2 text-brand-light border border-brand-mid
+           px-6 py-3 rounded-sm
+           text-sm font-medium tracking-widest uppercase
+           transition-all duration-200
+           hover:border-brand-gold hover:text-brand-gold;
+  }
+
+  /* ── FORM INPUTS ── */
+  .input {
+    @apply w-full px-4 py-3
+           bg-brand-dark border border-brand-mid
+           rounded-sm text-brand-light text-sm
+           placeholder:text-brand-muted
+           transition-colors duration-200
+           focus:outline-none focus:border-brand-gold
+           focus:ring-1 focus:ring-brand-gold;
+  }
+
+  .label {
+    @apply block text-xs font-medium tracking-widest uppercase
+           text-brand-muted mb-1.5;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    @apply bg-brand-dark border border-brand-mid
+           rounded-sm overflow-hidden
+           transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply hover:border-brand-gold/30 hover:-translate-y-1
+           hover:shadow-lg hover:shadow-black/50;
+  }
+
+  /* ── SECTION LAYOUT ── */
+  /* Container: centres content and adds consistent side padding */
+  .container-site {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing — consistent vertical padding for all page sections */
+  .section-padding {
+    @apply py-16 lg:py-24;
+  }
+
+  /* Section eyebrow — small uppercase label above headings */
+  .section-tag {
+    @apply text-xs font-medium tracking-[0.25em] uppercase text-brand-gold
+           flex items-center gap-3 mb-3;
+  }
+  .section-tag::before {
+    content: '';
+    @apply block w-8 h-px bg-brand-gold;
+  }
+
+  .section-title {
+    @apply font-display text-3xl lg:text-4xl font-bold text-brand-white;
+  }
+
+  /* ── BADGE / PILL ── */
+  .badge-gold {
+    @apply inline-block text-[10px] font-semibold tracking-[0.1em] uppercase
+           bg-brand-gold text-brand-black px-2 py-0.5 rounded-sm;
+  }
+  .badge-sale {
+    @apply inline-block text-[10px] font-semibold tracking-[0.1em] uppercase
+           bg-red-600 text-white px-2 py-0.5 rounded-sm;
+  }
+  .badge-new {
+    @apply inline-block text-[10px] font-semibold tracking-[0.1em] uppercase
+           bg-brand-gold text-brand-black px-2 py-0.5 rounded-sm;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    @apply border-t border-brand-mid;
+  }
+
+  /* ── GOLD GRADIENT TEXT ── */
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-brand-gold to-brand-gold-light
+           bg-clip-text text-transparent;
+  }
+}

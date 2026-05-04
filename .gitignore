@@ -1,0 +1,28 @@
+# =====================================================
+# .gitignore
+# Files listed here are NEVER uploaded to GitHub
+# =====================================================
+
+# SECRET — never expose these
+.env.local
+.env.*.local
+.env
+
+# Next.js build output
+.next/
+out/
+
+# Dependencies — reinstalled with npm install
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
