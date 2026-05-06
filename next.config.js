@@ -3,18 +3,22 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        // Supabase Storage — your uploaded product images
         protocol: "https",
         hostname: "*.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
       {
-        // ASOS CDN — used by the 490 seed products
+        // ASOS CDN — 490 seed products
         protocol: "https",
         hostname: "images.asos-media.com",
       },
       {
-        // Placeholder images for dev/demo
+        // Unsplash — blog cover images
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        // Placeholder images
         protocol: "https",
         hostname: "placehold.co",
       },

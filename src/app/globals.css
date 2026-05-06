@@ -180,6 +180,74 @@
     @apply border-t border-brand-mid;
   }
 
+  /* ── BLOG ARTICLE BODY ── */
+  /* Applied to the div that renders blog post HTML content.
+     Since blog content comes from the database as raw HTML,
+     we style it here using descendant selectors rather than
+     Tailwind classes (which can't be applied to dynamic HTML). */
+  .prose-article {
+    @apply text-brand-light leading-relaxed;
+  }
+  .prose-article h2 {
+    @apply font-display text-2xl lg:text-3xl font-bold text-brand-white mt-10 mb-4;
+  }
+  .prose-article h3 {
+    @apply font-display text-xl font-bold text-brand-white mt-8 mb-3;
+  }
+  .prose-article p {
+    @apply text-brand-light leading-[1.85] mb-5;
+  }
+  .prose-article a {
+    @apply text-brand-gold underline underline-offset-2 hover:text-brand-gold-light transition-colors;
+  }
+  .prose-article strong {
+    @apply font-semibold text-brand-white;
+  }
+  .prose-article em {
+    @apply italic text-brand-light;
+  }
+  .prose-article ul {
+    @apply list-none mb-5 space-y-2;
+  }
+  .prose-article ul li {
+    @apply text-brand-light pl-5 relative;
+  }
+  .prose-article ul li::before {
+    content: '—';
+    @apply absolute left-0 text-brand-gold font-bold;
+  }
+  .prose-article ol {
+    @apply list-decimal list-inside mb-5 space-y-2;
+  }
+  .prose-article ol li {
+    @apply text-brand-light;
+  }
+  .prose-article ol li::marker {
+    @apply text-brand-gold font-bold;
+  }
+  .prose-article blockquote {
+    @apply border-l-4 border-brand-gold bg-brand-dark2 px-6 py-4 my-6 rounded-r-sm;
+  }
+  .prose-article blockquote p {
+    @apply text-brand-light italic text-lg mb-0;
+  }
+  .prose-article img {
+    @apply w-full rounded-sm my-6 object-cover;
+  }
+  .prose-article hr {
+    @apply border-brand-mid my-8;
+  }
+  /* Tip/highlight box — wrap content in <div class="tip"> in your blog HTML */
+  .prose-article .tip {
+    @apply bg-brand-gold/10 border border-brand-gold/30 rounded-sm p-5 my-6;
+  }
+  .prose-article .tip p {
+    @apply mb-0 text-brand-light;
+  }
+  .prose-article .tip strong {
+    @apply text-brand-gold;
+  }
+
   /* ── GOLD GRADIENT TEXT ── */
   .text-gradient-gold {
     @apply bg-gradient-to-r from-brand-gold to-brand-gold-light

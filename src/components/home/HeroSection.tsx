@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Truck, Shield, Star } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import img1 from '@/../public/images/pexels-el-gringo-photo-116752370-9936373.jpg'
+import img1 from"@/../public/images/pexels-el-gringo-photo-116752370-9936373.jpg";
 
 // Small trust badge shown in the hero
 const TrustBadge = ({ icon: Icon, text }: { icon: React.ElementType; text: string }) => (

@@ -11,7 +11,7 @@ import { ArrowRight, Star, Quote, Package, MessageCircle, Store } from "lucide-r
 import ProductCard from "@/components/shop/ProductCard";
 import { Product } from "@/types";
 import { PRODUCT_CATEGORIES } from "@/lib/utils";
-import image1 from '@/../public/images/insta/pexels-wolrider-29352979.jpg'
+import img1 from "@/../public/images/pexels-tima-miroshnichenko-6766361.jpg";
 
 // ── MARQUEE BAR ──────────────────────────────────────
 // Scrolling ticker strip between hero and categories.
@@ -353,7 +353,7 @@ export function InstagramFeed() {
               className="aspect-square bg-brand-dark2 hover:opacity-80 transition-opacity overflow-hidden rounded-sm"
             >
               <Image
-                src={image1}
+                src={img1}
                 alt="Instagram post"
                 width={200}
                 height={200}
